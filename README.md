@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # flutter_application_test
 
 A new Flutter project.
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# bleComm
+flutter學習紀錄,主要為IOT裝置的APP開發, 涵蓋了 藍牙BLE及wifi的應用
+>>>>>>> origin/main
