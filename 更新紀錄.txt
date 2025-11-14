@@ -1,0 +1,7 @@
+
+HM-10
+
+write
+deviceId = "50:33:8B:26:82:69" 
+serviceId = Uuid (0000ffe0-0000-1000-8000-00805f9b34fb)
+characteristicId = Uuid (0000ffe1-0000-1000-8000-00805f9b34fb)
