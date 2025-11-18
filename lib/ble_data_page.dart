@@ -200,7 +200,7 @@ class BleDataPage extends StatefulWidget {
 }
 
 class _BleDataPageState extends State<BleDataPage> {
-  final FlutterReactiveBle ble = FlutterReactiveBle();
+  //final FlutterReactiveBle ble = FlutterReactiveBle();
 
   @override
   Widget build(BuildContext context) {
@@ -313,30 +313,30 @@ Future<void> showConfirmationDialog(BuildContext context) async {
     barrierDismissible: false, 
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('重要確認'),
+        title: const Text('Message'),
         content: const SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              Text('您確定要永久刪除此項目嗎？'),
-              Text('此操作無法撤銷。'),
+              Text('Data will be sent to all devices？'),
+              Text('Are you sure to proceed?'),              
             ],
           ),
         ),
         actions: <Widget>[
           // 取消按鈕
           TextButton(
-            child: const Text('取消'),
+            child: const Text('cancel'),
             onPressed: () {
               Navigator.of(context).pop(); // 關閉對話框
-              print('用戶取消了操作');
+              print('message cancelled.');
             },
           ),
           // 確定/刪除按鈕
           TextButton(
-            child: const Text('刪除', style: TextStyle(color: Colors.red)),
+            child: const Text('Yes', style: TextStyle(color: Colors.red)),
             onPressed: () {
               Navigator.of(context).pop(); // 關閉對話框
-              print('用戶確認刪除！');
+              print('message sent！');
               // 執行刪除操作
             },
           ),

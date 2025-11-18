@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 import 'ble_data_page.dart';
 import 'main.dart';
 
+import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
+
 // 裝置連接頁面 - 作為一個 Stateful Widget
 class ConnectPage extends StatefulWidget {
   const ConnectPage({super.key});
@@ -33,12 +35,11 @@ class _ConnectPageState extends State<ConnectPage> {
   StreamSubscription<DiscoveredDevice>? scanSubscription;
   // 追蹤當前是否正在掃描的狀態旗標
   bool isScanning = false;
-  
+
   // 新增：用於自動停止掃描的計時器
   Timer? _scanTimer;
 
   List<String> selectedDeviceID = [];
-
 
 
   // 狀態初始化時調用
@@ -47,6 +48,7 @@ class _ConnectPageState extends State<ConnectPage> {
     super.initState();
     // 進入頁面時，首先檢查並請求藍牙所需權限
     checkAndRequestBluetoothPermissions();
+
   }
 
   // 頁面銷毀時調用，用於資源清理
@@ -58,10 +60,10 @@ class _ConnectPageState extends State<ConnectPage> {
     // 新增：取消計時器，防止在頁面銷毀後還執行
     _scanTimer?.cancel();
 
-    
-
     super.dispose();
   }
+
+  
 
   // 🚀 檢查和請求藍牙權限
   Future<bool> checkAndRequestBluetoothPermissions() async {
@@ -113,6 +115,11 @@ class _ConnectPageState extends State<ConnectPage> {
         .listen(
           // 處理掃描到的每個裝置
           (device) {
+            if (device.name == "SolteamBLE01") {
+              print(
+                "Found device with empty name, id: ${device.id}, rssi: ${device.rssi}",
+              );
+            }
             // 檢查裝置 ID 是否已存在於列表中，避免重複添加
             if (discoverdDevices.every((d) => d.id != device.id)) {
               // 更新 UI 狀態：將新裝置加入列表
@@ -122,7 +129,9 @@ class _ConnectPageState extends State<ConnectPage> {
             } else {
               // 如果裝置已存在，更新其 RSSI 值
               setState(() {
-                final index = discoverdDevices.indexWhere((d) => d.id == device.id);
+                final index = discoverdDevices.indexWhere(
+                  (d) => d.id == device.id,
+                );
                 if (index != -1) {
                   discoverdDevices[index] = device;
                 }
@@ -166,11 +175,11 @@ class _ConnectPageState extends State<ConnectPage> {
   Future<void> startScan() async {
     // 如果當前正在掃描
     //if (isScanning) {
-      print("Restarting scan...");
-      // 先停止當前的掃描
-      await stopScan();
-      // 延遲 1 秒，確保 BLE 晶片有時間重設狀態
-      await Future.delayed(const Duration(seconds: 1));
+    print("Restarting scan...");
+    // 先停止當前的掃描
+    await stopScan();
+    // 延遲 1 秒，確保 BLE 晶片有時間重設狀態
+    await Future.delayed(const Duration(seconds: 1));
     //}
     // 呼叫實際的掃描函數
     scanBleDevices();
@@ -210,13 +219,11 @@ class _ConnectPageState extends State<ConnectPage> {
   }
   */
 
-
   // 🔨 構建 UI 介面
   @override
   Widget build(BuildContext context) {
-
-    var mainAppState=context.read <MyAppState>();
-    var bleAppState=context.read <BleAppState>();
+    var mainAppState = context.read<MyAppState>();
+    var bleAppState = context.read<BleAppState>();
 
     return Scaffold(
       // 1. 將 floatingActionButton 指向一個 Row Widget
@@ -252,8 +259,8 @@ class _ConnectPageState extends State<ConnectPage> {
               onPressed: () {
                 mainAppState.changePage(AppTab.PAGE_BLE_DATA);
                 stopScan();
-                for(var device in BleGlobal.devices){
-                  device.connect();                
+                for (var device in BleGlobal.devices) {
+                  device.connect();
                 }
               },
               child: const Column(
@@ -266,50 +273,65 @@ class _ConnectPageState extends State<ConnectPage> {
               ),
             ),
           ),
+          
         ],
       ),
       // 設定浮動按鈕的位置：底部中央
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       // 頁面主體：使用 ListView.builder 構建可滾動的裝置列表
-      body: SingleChildScrollView (
+      body: SingleChildScrollView(
         child: Column(
           children: [
-        
+            
+
             //注意:在for(device in devices)中直接remove device會導致錯誤,
             //必須使用倒序迴圈或複製另一份list來操作,才不會造成index錯誤
-            //for (var device in BleGlobal.devices)            
-            for (int i=BleGlobal.devices.length-1;i>=0;i--)
+            //for (var device in BleGlobal.devices)
+            for (int i = BleGlobal.devices.length - 1; i >= 0; i--)
               ListTile(
                 // 裝置名稱，如果名稱為空則顯示 'Unknown'
-                title: Text(BleGlobal.devices[i].name.isNotEmpty ? BleGlobal.devices[i].name : "Unknown"),
+                title: Text(
+                  BleGlobal.devices[i].name.isNotEmpty
+                      ? BleGlobal.devices[i].name
+                      : "Unknown",
+                ),
                 // 裝置 ID (通常是 MAC 地址或 UUID)
-                subtitle: Text('MAC:${BleGlobal.devices[i].macId}\t\t state: ${BleGlobal.devices[i].isConnected ? "Connected" : "Disconnected"}'),
-        
+                subtitle: Text(
+                  'MAC:${BleGlobal.devices[i].macId}\t\t state: ${BleGlobal.devices[i].isConnected ? "Connected" : "Disconnected"}',
+                ),
+
                 tileColor: Colors.pink.shade100,
-                    
+
                 onTap: () {
-                  setState(() { 
-                    BleGlobal.devices[i].removeFormList();              
+                  setState(() {
+                    BleGlobal.devices[i].removeFormList();
                   });
                 },
               ),
-        
+
             for (var device in discoverdDevices)
-              if(BleGlobal.devices.every((d) => d.macId != device.id))
+              if (BleGlobal.devices.every((d) => d.macId != device.id))
                 ListTile(
                   // 裝置名稱，如果名稱為空則顯示 'Unknown'
                   title: Text(device.name.isNotEmpty ? device.name : "Unknown"),
                   // 裝置 ID (通常是 MAC 地址或 UUID)
-                  subtitle: Text('MAC:${device.id}\t\tRSSI: ${device.rssi} dBm'),
-        
+                  subtitle: Text(
+                    'MAC:${device.id}\t\tRSSI: ${device.rssi} dBm',
+                  ),
+
                   tileColor: Colors.white,
                   onTap: () {
-                    setState(() {                    
-                        BleGlobal.devices.add(
-                          MyBleDevice(macId: device.id, name: device.name, ble: BleGlobal.ble, devices: BleGlobal.devices, bleState: bleAppState),
-                        );
-                      }
-                    );
+                    setState(() {
+                      BleGlobal.devices.add(
+                        MyBleDevice(
+                          macId: device.id,
+                          name: device.name,
+                          ble: BleGlobal.ble,
+                          devices: BleGlobal.devices,
+                          bleState: bleAppState,
+                        ),
+                      );
+                    });
                   },
                 ),
           ],

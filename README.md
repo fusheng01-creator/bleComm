@@ -1,21 +1,9 @@
-<<<<<<< HEAD
-# flutter_application_test
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
 # bleComm
 flutter學習紀錄,主要為IOT裝置的APP開發, 涵蓋了 藍牙BLE及wifi的應用
->>>>>>> origin/main
+
+已完成項目:
+1. 建立APP基本操作架構 (main.dart)
+2. 使用flutter_reactive_ble，掃描裝置、讀寫服務 (ble_connect_page.dart)
+3. 複選device列表，實現多BLE裝置的連線及讀寫 (ble_connect_page.dart)
+4. beacon功能測試中

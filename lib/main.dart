@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'ble_connect_page.dart';
 import 'ble_data_page.dart';
+import 'about_page.dart';
+import 'ble_beacon_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +16,8 @@ enum AppTab {
   PAGE_FAVORITES,
   PAGE_BLE_DATA,
   PAGE_BLE_SCAN,
+  PAGE_BLE_BEACON,
+  PAGE_ABOUT,
 }
 
 class MyApp extends StatelessWidget {
@@ -45,7 +49,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   
-  AppTab pageSelectedIndex = AppTab.PAGE_BLE_SCAN;
+  AppTab pageSelectedIndex = AppTab.PAGE_ABOUT;
   String appBarName = 'bleComm';
 
   var current = WordPair.random();
@@ -127,6 +131,12 @@ class _MyHomePageState extends State<MyHomePage> {
       case AppTab.PAGE_BLE_SCAN:
         page = ConnectPage();
         break;
+      case AppTab.PAGE_ABOUT:
+        page = AboutPage();
+        break;
+      case AppTab.PAGE_BLE_BEACON:
+        page = BeaconPage();
+        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -155,12 +165,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ListTile(
-            title: Text('Generator'),
+            title: Text('About'),
             leading: Icon(Icons.home),
-            selected: selectedIndex == AppTab.PAGE_GENERATOR,
+            selected: selectedIndex == AppTab.PAGE_ABOUT,
             onTap: () {
               setState(() {
-                appState.changePage(AppTab.PAGE_GENERATOR);
+                appState.changePage(AppTab.PAGE_ABOUT);
                 
               });
               Navigator.pop(context); // 關閉抽屜
@@ -185,6 +195,18 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() {
                 appState.changePage(AppTab.PAGE_BLE_SCAN);
+                
+              });
+              Navigator.pop(context); // 關閉抽屜
+            },
+          ),
+          ListTile(
+            title: Text('BLE Beacon'),
+            leading: Icon(Icons.light_mode_outlined),
+            selected: selectedIndex == AppTab.PAGE_BLE_BEACON,
+            onTap: () {
+              setState(() {
+                appState.changePage(AppTab.PAGE_BLE_BEACON);
                 
               });
               Navigator.pop(context); // 關閉抽屜
