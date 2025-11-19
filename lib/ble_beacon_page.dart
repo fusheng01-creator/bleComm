@@ -160,8 +160,8 @@ class _BeaconPageState extends State<BeaconPage> {
 
                   if (result.beacons.isNotEmpty) {
                     isBeaconAlive += 1;
-                    if(isBeaconAlive > 1)
-                      isBeaconAlive = 1;
+                    if(isBeaconAlive > 2)
+                      isBeaconAlive = 2;
                     
                     if (isBeaconAlive==0) 
                     {
@@ -181,8 +181,8 @@ class _BeaconPageState extends State<BeaconPage> {
                   }
                   else {
                     isBeaconAlive -= 1;
-                    if(isBeaconAlive < -1)
-                      isBeaconAlive = -1;
+                    if(isBeaconAlive < -2)
+                      isBeaconAlive = -2;
 
                     if (isBeaconAlive==0) 
                     {

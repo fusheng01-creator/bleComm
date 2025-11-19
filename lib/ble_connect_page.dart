@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'ble_data_page.dart';
 import 'main.dart';
 
-import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
+
 
 // 裝置連接頁面 - 作為一個 Stateful Widget
 class ConnectPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   // 新增：用於自動停止掃描的計時器
   Timer? _scanTimer;
-
+  
   List<String> selectedDeviceID = [];
 
 
@@ -48,6 +48,7 @@ class _ConnectPageState extends State<ConnectPage> {
     super.initState();
     // 進入頁面時，首先檢查並請求藍牙所需權限
     checkAndRequestBluetoothPermissions();
+    
 
   }
 
@@ -59,6 +60,8 @@ class _ConnectPageState extends State<ConnectPage> {
     // 取消連接訂閱，釋放資源 (雖然在 connectToDevice 中連接成功後會導航走，但清理是好習慣)
     // 新增：取消計時器，防止在頁面銷毀後還執行
     _scanTimer?.cancel();
+
+  
 
     super.dispose();
   }

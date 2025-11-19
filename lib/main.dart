@@ -137,8 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case AppTab.PAGE_BLE_BEACON:
         page = BeaconPage();
         break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
+      
     }
 
     // ...

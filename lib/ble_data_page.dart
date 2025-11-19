@@ -10,7 +10,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 // 匯入狀態管理套件 Provider
 import 'package:provider/provider.dart';
 
-import 'main.dart';
+
 
 // 全域的 BLE 實例，方便在不同頁面中使用
 class BleGlobal {
@@ -204,10 +204,10 @@ class _BleDataPageState extends State<BleDataPage> {
 
   @override
   Widget build(BuildContext context) {
-    var bleState = context.watch<BleAppState>();
+    context.watch<BleAppState>();
     final TextEditingController controller =
         TextEditingController(); // 用於捕捉使用者輸入
-    ScrollController scrollController = ScrollController();
+    
 
     return Scaffold(
       // 2. 使用 SingleChildScrollView 讓內容超出螢幕時可以滾動
