@@ -6,17 +6,19 @@ import 'ble_connect_page.dart';
 import 'ble_data_page.dart';
 import 'about_page.dart';
 import 'ble_beacon_page.dart';
+import 'wifi_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-enum AppTab { 
-  PAGE_GENERATOR, 
+enum AppTab {
+  PAGE_GENERATOR,
   PAGE_FAVORITES,
   PAGE_BLE_DATA,
   PAGE_BLE_SCAN,
   PAGE_BLE_BEACON,
+  PAGE_WIFI_DATA,
   PAGE_ABOUT,
 }
 
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => MyAppState()),
         ChangeNotifierProvider(create: (context) => BleAppState()),
-
+        ChangeNotifierProvider(create: (context) => WifiAppState()),
       ],
       child: MaterialApp(
         title: 'bleComm',
@@ -44,11 +46,9 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class MyAppState extends ChangeNotifier {
-  
   AppTab pageSelectedIndex = AppTab.PAGE_ABOUT;
   String appBarName = 'bleComm';
 
@@ -60,7 +60,7 @@ class MyAppState extends ChangeNotifier {
     // Implement page change logic if needed
     pageSelectedIndex = tab;
 
-    appBarName= 'bleComm -> ${tab.toString()}';
+    appBarName = 'bleComm -> ${tab.toString()}';
 
     notifyListeners();
   }
@@ -94,16 +94,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  
-
-  
-
   @override
   void dispose() {
-
     //關閉頁面時，移除所有 BLE 裝置以釋放資源
-    for(int i=BleGlobal.devices.length-1;i>=0;i--){
+    for (int i = BleGlobal.devices.length - 1; i >= 0; i--) {
       BleGlobal.devices[i].removeFormList();
     }
 
@@ -112,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     var appState = context.watch<MyAppState>();
     var selectedIndex = appState.pageSelectedIndex;
     var appBarName = appState.appBarName;
@@ -137,32 +130,32 @@ class _MyHomePageState extends State<MyHomePage> {
       case AppTab.PAGE_BLE_BEACON:
         page = BeaconPage();
         break;
-      
+      case AppTab.PAGE_WIFI_DATA:
+        page = WifiPage();
+        break;
     }
 
     // ...
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarName),
-      ),
+      appBar: AppBar(title: Text(appBarName)),
       body: page,
       drawer: NavigationDrawer(
         //新增：導航欄
         children: [
           DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              child: const Column(
-                children: [
-                  Icon(Icons.manage_accounts, size: 64, color: Colors.white),
-                  Text(
-                    "bleComm Menu",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
-                  ),
-                ],
-              ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
             ),
+            child: const Column(
+              children: [
+                Icon(Icons.manage_accounts, size: 64, color: Colors.white),
+                Text(
+                  "bleComm Menu",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ],
+            ),
+          ),
           ListTile(
             title: Text('About'),
             leading: Icon(Icons.home),
@@ -170,7 +163,6 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() {
                 appState.changePage(AppTab.PAGE_ABOUT);
-                
               });
               Navigator.pop(context); // 關閉抽屜
             },
@@ -182,7 +174,6 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() {
                 appState.changePage(AppTab.PAGE_BLE_DATA);
-                
               });
               Navigator.pop(context); // 關閉抽屜
             },
@@ -194,7 +185,6 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() {
                 appState.changePage(AppTab.PAGE_BLE_SCAN);
-                
               });
               Navigator.pop(context); // 關閉抽屜
             },
@@ -206,7 +196,17 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() {
                 appState.changePage(AppTab.PAGE_BLE_BEACON);
-                
+              });
+              Navigator.pop(context); // 關閉抽屜
+            },
+          ),
+          ListTile(
+            title: Text('Wifi Data'),
+            leading: Icon(Icons.wifi),
+            selected: selectedIndex == AppTab.PAGE_WIFI_DATA,
+            onTap: () {
+              setState(() {
+                appState.changePage(AppTab.PAGE_WIFI_DATA);
               });
               Navigator.pop(context); // 關閉抽屜
             },
@@ -251,7 +251,7 @@ class FavoritesPage extends StatelessWidget {
                     showSnackbar(
                       context,
                       'YAY: You tapped on ${pair.asLowerCase},index=${appState.favorites.indexOf(pair)}',
-                    );                    
+                    );
                   },
                 ),
             ],

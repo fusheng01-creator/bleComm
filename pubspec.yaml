@@ -44,6 +44,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4 # 啟動圖示生成器插件
   dchs_flutter_beacon: 0.6.6 # Flutter 信標插件
   flutter_local_notifications: ^19.5.0 # 本地通知插件
+  network_info_plus: ^5.0.1 # 網路資訊插件
 
 dev_dependencies:
   flutter_test:

@@ -8,3 +8,4 @@ flutter學習紀錄,主要為IOT裝置的APP開發, 涵蓋了 藍牙BLE及wifi�
 3. 複選device列表，實現多BLE裝置的連線及讀寫 (ble_connect_page.dart)
 4. 使用dchs_flutter_beacon實現ble beacon功能 (ble_beacon_page.dart)
     -目前monitoring功能尚未正常動作，ranging功能OK
+5. 完成TCP server的連接與資料傳送 (wifi_page.dart)
